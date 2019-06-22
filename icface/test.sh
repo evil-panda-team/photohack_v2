@@ -1,0 +1,20 @@
+python3 test.py  \
+--dataroot ./      \
+--model pix2pix    \
+--which_model_netG resnet_6blocks  \
+--which_direction AtoB  \
+--dataset_mode aligned  \
+--norm batch  \
+--display_id 0  \
+--batchSize 1  \
+--loadSize 128  \
+--fineSize 128  \
+--no_flip  \
+--name gpubatch_resnet  \
+--how_many 1  \
+--ndf 256  \
+--ngf 128  \
+--which_ref ./new_crop/rafa.png  \
+--gpu_ids 0  \
+--csv_path ./csv/clarke.csv  \
+--results_dir results_video \
