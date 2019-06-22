@@ -104,6 +104,7 @@ icface/checkpoints/gpubatch_resnet/latest_net_DA.pth
 icface/checkpoints/gpubatch_resnet/latest_net_G.pth
 icface/checkpoints/gpubatch_resnet/latest_net_GN.pth
 icface/checkpoints/gpubatch_resnet/latest_net_I_E.pth
+processed/
 
 # mypy
 .mypy_cache/

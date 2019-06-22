@@ -2,7 +2,7 @@
 aspect_ratio: 1.0
 batchSize: 1
 checkpoints_dir: ./checkpoints
-csv_path: ./csv/clarke.csv
+csv_path: ./csv/ohmy.csv
 dataroot: ./
 dataset_mode: aligned
 display_id: 0

@@ -7,13 +7,18 @@ import cv2
 import numpy as np
 from PIL import Image
 #import pdb   
+import argparse
+
+parser = argparse.ArgumentParser(description='Process some image input.')
+parser.add_argument('--img', action='store', help='Image to parse')
+args = parser.parse_args()
 
 #def pre_process(path):
 for i in range(2):    
     detector = dlib.get_frontal_face_detector()
 
-    name = 'dimas'
-    cap = cv2.imread(name + '.jpg') # add your image here
+    name = args.img
+    cap = cv2.imread(name) # add your image here
     
     image= cv2.resize(cap, (400, 400))
 
@@ -42,6 +47,6 @@ for i in range(2):
 
                     f_im = Image.fromarray(d_num)
 
-                    f_im.save('./new_crop/'+ name +'.png')
+                    f_im.save('./new_crop/'+ name[4:-4] +'.png')
 
 
