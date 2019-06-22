@@ -5,32 +5,32 @@ import imageio
 templates_folder = 'templates/'
 animations_folder = 'animations/'
 gifs_folder = 'results/gifs/'
-template_name = 'template3_cropped.jpg'
+template_name = 'template_header.jpg'
 animation_name = 'telka.mp4'
 gif_name = 'newspaper.gif'
 
-scale_factor = 4
-if template_name == 'template4.jpg':
-    position = [230, 430]
-    desired_size = [580, 380]
-elif template_name == 'template3_cropped.jpg':
-    position = [200, 300]
-    desired_size = [400, 200]
 
-position = [int(x/scale_factor) for x in position]
-desired_size = [int(x/scale_factor) for x in desired_size]
+scale_factor = 4
+x_pos = 0.5
+y_pos = 0.3
+x_scale = 1
+y_scale = 1
+
 cv2.namedWindow("output", cv2.WINDOW_NORMAL)
 cv2.namedWindow("template", cv2.WINDOW_NORMAL)
 
 # Load an color image in grayscale
 template = cv2.imread('{}{}'.format(templates_folder,
                                     template_name), cv2.IMREAD_COLOR)
-cv2.imshow('template', template)
+template = cv2.resize(template, None, fx=1/scale_factor, fy=1/scale_factor)
+newspaper = np.ones((template.shape[0]*5, template.shape[1], 3), np.uint8)*255
+newspaper[0:template.shape[0], 0:template.shape[1], :] = template
+
+position = [int(x_pos*newspaper.shape[0]), int(y_pos*newspaper.shape[0])]
+
+cv2.imshow('template', newspaper)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
-template = cv2.resize(template, None, fx=1/scale_factor, fy=1/scale_factor)
-
 
 print(template.shape)
 cap = cv2.VideoCapture('{}{}'.format(animations_folder,
@@ -50,18 +50,21 @@ with imageio.get_writer('{}{}'.format(gifs_folder,
     while(cap.isOpened()):
         ret, frame = cap.read()
         if ret == True:
-            output = template.copy()
-            anim_frame = cv2.resize(
-                frame, tuple(desired_size))
+            if x_scale == 1 and y_scale == 1:
+                anim_frame = frame
+            else:
+                desired_size = [int(x_scale * frame[0]),
+                                int(y_scale * frame[1])]
+                anim_frame = cv2.resize(
+                    frame, tuple(desired_size))
             anim_shape = anim_frame.shape
             anim_h, anim_w = anim_shape[1], anim_shape[0]
-            output[position[0]:position[0]+anim_w,
-                   position[1]: position[1]+anim_h] = anim_frame
+            newspaper[position[0]:position[0]+anim_w,
+                      position[1]: position[1]+anim_h] = anim_frame
 
-            # output_resized = cv2.resize(output, None, fx=0.25, fy=0.25)
-            output = cv2.cvtColor(output, cv2.COLOR_BGR2RGB)
-            cv2.imshow('output', output)
-            writer.append_data(output)
+            newspaper = cv2.cvtColor(newspaper, cv2.COLOR_BGR2RGB)
+            cv2.imshow('output', newspaper)
+            writer.append_data(newspaper)
             # Press Q to exit
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 break

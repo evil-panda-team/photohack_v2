@@ -15,6 +15,6 @@ python3 test.py  \
 --ndf 256  \
 --ngf 128  \
 --which_ref ./new_crop/rafa.png  \
---gpu_ids 0  \
---csv_path ./csv/clarke.csv  \
+--gpu_ids 1  \
+--csv_path ./csv/navalniy.csv  \
 --results_dir results_video \
