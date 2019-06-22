@@ -107,3 +107,4 @@ icface/checkpoints/gpubatch_resnet/latest_net_I_E.pth
 
 # mypy
 .mypy_cache/
+results/
