@@ -4,6 +4,9 @@ from .base_options import BaseOptions
 class TestOptions(BaseOptions):
     def initialize(self):
         BaseOptions.initialize(self)
+        self.parser.add_argument('--input_img', type=str, default='./img/rafa.png', help='input image')
+        
+
         self.parser.add_argument('--ntest', type=int, default=float("inf"), help='# of test examples.')
                                  
                                  

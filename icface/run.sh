@@ -1,4 +1,5 @@
-python3 test.py  \
---which_ref ./new_crop/rafa.png  \
+python3 run.py  \
+--input_img ./vlad.png
+--which_ref ./temp.png  \
 --csv_path ./csv/navalniy.csv
 

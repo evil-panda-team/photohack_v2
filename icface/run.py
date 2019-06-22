@@ -25,17 +25,16 @@ from models.models import create_model
 #from util import html
 import pdb
 
-parser = argparse.ArgumentParser(description='Process some image input.')
-parser.add_argument('--img', action='store', help='Image to parse')
-args = parser.parse_args()
+opt = TestOptions().parse()
+opt.nThreads = 1   # test code only supports nThreads = 1
+opt.batchSize = 1  # test code only supports batchSize = 1
+opt.serial_batches = True  # no shuffle
+opt.no_flip = True  # no flip
 
-###### PART 1
-
-#def pre_process(path):
-    
+###### PART 1    
 detector = dlib.get_frontal_face_detector()
 
-name = args.img
+name = opt.input_img
 cap = cv2.imread(name) # add your image here
 
 image= cv2.resize(cap, (400, 400))
@@ -65,16 +64,11 @@ for rect in rects:
     
     f_im = Image.fromarray(d_num)
     
-    f_im.save('./new_crop/'+ name[4:-4] +'.png')
+#    f_im.save('./new_crop/'+ name[4:-4] +'.png')
+    f_im.save('./temp.png')
         
     
 #### PART 2
-opt = TestOptions().parse()
-opt.nThreads = 1   # test code only supports nThreads = 1
-opt.batchSize = 1  # test code only supports batchSize = 1
-opt.serial_batches = True  # no shuffle
-opt.no_flip = True  # no flip
-
 data_loader = CreateDataLoader(opt)
 dataset = data_loader.load_data()
 model = create_model(opt)

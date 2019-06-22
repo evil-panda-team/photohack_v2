@@ -12,6 +12,7 @@ fineSize: 128
 gpu_ids: [1]
 how_many: 1
 init_type: normal
+input_img: ./img/rafa.png
 input_nc: 3
 isTrain: False
 loadSize: 128
