@@ -4,6 +4,19 @@ import imageio
 from types import SimpleNamespace
 
 
+def add_sepia(img, k=1):
+    matrix = [[0.272 - 0.349 * (1 - k), 0.534 - 0.534 *
+               (1 - k), 0.131 + 0.869 * (1 - k)],
+              [0.393 + 0.607 * (1 - k), 0.769 - 0.769 *
+               (1 - k), 0.189 - 0.189 * (1 - k)],
+              [0.349 - 0.349 * (1 - k), 0.686 + 0.314 *
+               (1 - k), 0.168 - 0.168 * (1 - k)]]
+
+    filt = cv2.transform(img, np.matrix(matrix))
+    filt[np.where(filt > 255)] = 255
+    return filt
+
+
 def draw_text_scaled_to_rect(img, target_text, target_rect, font_ft, thickness, color):
     size = font_ft.getTextSize(target_text, 10, thickness)
     text_width = size[0][0]
@@ -101,7 +114,6 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
         anim_w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         anim_h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    images = []
     t_rows, t_cols, t_channels = template.shape
     # Read until video is completed
     with imageio.get_writer('{}{}'.format(ns_paths.gifs_folder,
@@ -114,17 +126,24 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
                     angle = 0
                 anim_frame = cv2.resize(
                     frame, tuple(desired_size))
+                if ns_transforms.sepia:
+                    anim_frame = add_sepia(
+                        anim_frame, ns_transforms.sepia_scale)
                 anim_shape = anim_frame.shape
                 anim_h, anim_w = anim_shape[1], anim_shape[0]
                 template[position[0]:position[0]+anim_w,
                          position[1]: position[1]+anim_h] = anim_frame
 
                 output = cv2.cvtColor(template, cv2.COLOR_BGR2RGB)
-                if ns_transforms.rotate:
+                if ns_transforms.rotate or ns_transforms.scale:
+                    angle_t = (ns_transforms.angle_start +
+                               angle) if ns_transforms.rotate else 0
+                    scale_t = (ns_transforms.scale_start +
+                               ns_transforms.scale_step*angle) if ns_transforms.scale else 1
                     R = cv2.getRotationMatrix2D(
                         (int(t_cols/2), int(t_rows/2)
-                         ), ns_transforms.angle_start + angle,
-                        ns_transforms.scale_start + ns_transforms.scale_step*angle)
+                         ), angle_t,
+                        scale_t)
                     output = cv2.warpAffine(output, R, (t_cols, t_rows))
                 if show_result:
                     cv2.imshow('output', output)
@@ -135,8 +154,6 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
                     break
             else:
                 break
-
-    # When everything done, release the video capture object
     cap.release()
 
 
@@ -144,6 +161,9 @@ def main():
     # Image transformation
     params_transform = {
         'rotate': True,
+        'scale': True,
+        'sepia': True,
+        'sepia_scale': 0.6,
         'angle_start': 0,
         'angle_step': 0.5,
         'scale_start': 0.5,
@@ -164,8 +184,8 @@ def main():
         'thickness_line_1': 2,
         'thickness_line_2': -1,
         'color': (0, 0, 0),
-        'headline_text': 'Sensation!!!',
-        'sub_headline_text': 'Vlados okazalsya volcharoy'
+        'headline_text': 'SENSATION',
+        'sub_headline_text': 'MENSTRUAL CUP FOR MEN'
     }
 
     # Select one of the scenarios
