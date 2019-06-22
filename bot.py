@@ -87,7 +87,7 @@ def work(bot, update, option):
     # Select one of the scenarios
     scenario = 2
     scale_factor = 3
-    show_result = True
+    show_result = False
 
     make_gif(params_paths, params_text, params_transform,
              scale_factor=scale_factor, scenario=scenario, show_result=show_result)
