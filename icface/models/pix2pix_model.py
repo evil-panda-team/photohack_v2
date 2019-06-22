@@ -42,6 +42,12 @@ class Pix2PixModel(BaseModel):
                    torch.sum(torch.abs(mat[:, :, :-1, :] - mat[:, :, 1:, :]))
     def initialize(self, opt):
         BaseModel.initialize(self, opt)
+        
+      
+        self.output_filename = opt.input_img.split('/')[-1][:-4]
+  
+
+
         self.isTrain = opt.isTrain
         self.B=opt.batchSize
 
@@ -130,7 +136,8 @@ class Pix2PixModel(BaseModel):
         self.netGN.eval()
         self.I_E.eval()
 #        pdb.set_trace()
-        desti=os.path.dirname(self.image_paths[0])+'/'+self.opt.results_dir
+#        desti=os.path.dirname(self.image_paths[0])+'/'+self.opt.results_dir
+        desti = 'tempdir'
 
         if not os.path.isdir(desti):
                 os.makedirs(desti)     
@@ -167,8 +174,10 @@ class Pix2PixModel(BaseModel):
  
 #                   
                 #put your video_path    
-                os.system("ffmpeg -r 25 -i ./new_crop/results_video/%01d_re.png -vcodec mpeg4 -y movie.mp4")
-                os.system('rm -r ./new_crop/results_video/')
+                os.system("ffmpeg -r 25 -i ./tempdir/%01d_re.png -vcodec mpeg4 -y {}.mp4".format(self.output_filename))
+                os.system('rm -r ./tempdir/')
+#                os.system("ffmpeg -r 25 -i ./new_crop/results_video/%01d_re.png -vcodec mpeg4 -y movie.mp4")
+#                os.system('rm -r ./new_crop/results_video/')
 
     def get_image_paths(self):
         return self.image_paths
