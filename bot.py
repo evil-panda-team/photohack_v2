@@ -10,6 +10,7 @@ from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler, Filters
 
 from icface.run import create_mp4
+from add_video_in_template import make_gif
 
 import pathlib
 
@@ -53,11 +54,46 @@ def menu_keyboard():
 
 
 def work(bot, update, option):
-    # TODO: put work here
     userid = update.callback_query.message.chat.id
     create_mp4(result_path + str(userid)+ "/source.jpg", option)
 
-    gifpath = result_path + str(userid)+ "/source.mp4"
+    params_transform = {
+        'rotate': True,
+        'angle_start': 0,
+        'angle_step': 0.5,
+        'scale_start': 0.5,
+        'scale_step': 0.01
+    }
+
+    folder = result_path + str(userid) + "/"
+    # Paths
+    params_paths = {
+        'templates_folder': 'templates/',
+        'animations_folder': folder,
+        'gifs_folder': folder,
+        'animation_name': 'source.mp4',
+        'gif_name': 'source.gif'
+    }
+
+    # Text lines params
+    params_text = {
+        'thickness_line_1': 2,
+        'thickness_line_2': -1,
+        'color': (0, 0, 0),
+        'headline_text': 'Sensation!!!',
+        'sub_headline_text': 'Vlados okazalsya volcharoy'
+    }
+
+    # Select one of the scenarios
+    scenario = 2
+    scale_factor = 3
+    show_result = True
+
+    make_gif(params_paths, params_text, params_transform,
+             scale_factor=scale_factor, scenario=scenario, show_result=show_result)
+
+
+    gifpath = result_path + str(userid)+ "/source.gif"
     bot.send_animation(chat_id=update.callback_query.message.chat_id, animation=open(gifpath, 'rb'), timeout=50)
 
 
