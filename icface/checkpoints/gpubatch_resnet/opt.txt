@@ -2,14 +2,14 @@
 aspect_ratio: 1.0
 batchSize: 1
 checkpoints_dir: ./checkpoints
-csv_path: csv/gay.csv
+csv_path: ./csv/navalniy.csv
 dataroot: ./
 dataset_mode: aligned
 display_id: 0
 display_port: 8097
 display_winsize: 256
 fineSize: 128
-gpu_ids: [1]
+gpu_ids: [0]
 how_many: 1
 init_type: normal
 input_nc: 3
@@ -35,7 +35,7 @@ which_direction: AtoB
 which_epoch: latest
 which_model_netD: basic
 which_model_netG: resnet_6blocks
-which_ref: ./new_crop/vlad.png
+which_ref: ./new_crop/rafa.png
 which_ref_d1: path/to/reference/image
 which_ref_d2: path/to/reference/image
 -------------- End ----------------
