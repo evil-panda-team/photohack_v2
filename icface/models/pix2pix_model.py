@@ -44,7 +44,7 @@ class Pix2PixModel(BaseModel):
         BaseModel.initialize(self, opt)
         
       
-        self.output_filename = opt.input_img.split('/')[-1][:-4]
+        self.output_filename = opt.input_img[:-4]
   
 
 
