@@ -10,11 +10,9 @@ icface/checkpoints/gpubatch_resnet/latest_net_G.pth
 icface/checkpoints/gpubatch_resnet/latest_net_GN.pth
 icface/checkpoints/gpubatch_resnet/latest_net_I_E.pth
 icface/checkpoints/gpubatch_resnet/opt.txt
-<<<<<<< HEAD
 
 # mypy
 .mypy_cache/
 results/
-=======
 processed/
->>>>>>> 3d22bedb9a18f9e745d7305d21c5d5cc79fcbbef
+checkpoints/

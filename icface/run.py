@@ -5,6 +5,8 @@ Created on Sat Jun 22 16:54:36 2019
 
 @author: kenny
 """
+import sys
+sys.path.insert(0, './icface')
 
 #from imutils.face_utils import FaceAligner
 from imutils.face_utils import rect_to_bb
