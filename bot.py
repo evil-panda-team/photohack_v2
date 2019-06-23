@@ -49,8 +49,10 @@ def debugprint(obj):
 
 
 def menu_keyboard():
-    keyboard = [[InlineKeyboardButton('baba ', callback_data='first')],
-                [InlineKeyboardButton('carrey ', callback_data='second')],
+    keyboard = [[InlineKeyboardButton('talk ', callback_data='one')],
+                [InlineKeyboardButton('bla-bla ', callback_data='two')],
+                [InlineKeyboardButton('scream ', callback_data='three')],
+                [InlineKeyboardButton('mimimi ', callback_data='four')],
                 ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -62,12 +64,12 @@ def work(bot, update, option):
         'rotate': True,
         'scale': True,
         'skew': False,
-        'sepia': True,
+        'sepia': False,
         'sepia_scale': 0.6,
         'angle_start': 0,
-        'angle_step': 0.5,
-        'scale_start': 0.5,
-        'scale_step': 0.01
+        'angle_step': 0.1,
+        'scale_start': 0.3,
+        'scale_step': 0.08
     }
     folder = result_path + str(userid) + "/"
     # Paths
@@ -87,7 +89,7 @@ def work(bot, update, option):
         'color': (0, 0, 0),
         'font': 'Mugglenews.ttf',
         'headline_text': 'SENSATION!',
-        'sub_headline_text': 'MENSTRUAL CUP FOR MEN'
+        'sub_headline_text': 'New SUPERSTAR found!'
     }
 
     # Select one of the scenarios
@@ -103,18 +105,33 @@ def work(bot, update, option):
                        animation=open(gifpath, 'rb'), timeout=50)
 
 
-def first_menu(bot, update):
+def one_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
-                     text="baba choosed! Wait a bit please")
+                     text="one choosed! Wait a bit please")
 
-    work(bot, update, "icface/csv/baba.csv")
+    work(bot, update, "icface/csv/muzhik.csv")
 
 
-def second_menu(bot, update):
+
+def two_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
-                     text="carrey choosed! Wait a bit please")
+                     text="two choosed! Wait a bit please")
 
-    work(bot, update, "icface/csv/carrey.csv")
+    work(bot, update, "icface/csv/vlad_photolab.csv")
+
+
+def three_menu(bot, update):
+    bot.send_message(chat_id=update.callback_query.message.chat_id,
+                     text="three choosed! Wait a bit please")
+
+    work(bot, update, "icface/csv/vlad_scream.csv")
+
+def four_menu(bot, update):
+    bot.send_message(chat_id=update.callback_query.message.chat_id,
+                     text="four choosed! Wait a bit please")
+
+    work(bot, update, "icface/csv/gay.csv")
+
 
 
 def run_bot():
@@ -138,8 +155,10 @@ def run_bot():
     photo_handler = MessageHandler(Filters.photo, photohandler)
     dispatcher.add_handler(photo_handler)
 
-    dispatcher.add_handler(CallbackQueryHandler(first_menu, pattern='first'))
-    dispatcher.add_handler(CallbackQueryHandler(second_menu, pattern='second'))
+    dispatcher.add_handler(CallbackQueryHandler(one_menu, pattern='one'))
+    dispatcher.add_handler(CallbackQueryHandler(two_menu, pattern='second'))
+    dispatcher.add_handler(CallbackQueryHandler(three_menu, pattern='three'))
+    dispatcher.add_handler(CallbackQueryHandler(four_menu, pattern='four'))
 
     updater.start_polling()
     updater.idle()
