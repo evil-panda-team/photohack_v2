@@ -5,8 +5,8 @@ Created on Sat Jun 22 16:54:36 2019
 
 @author: kenny
 """
-import sys
-sys.path.insert(0, './icface')
+#import sys
+#sys.path.insert(0, './icface')
 
 #from imutils.face_utils import FaceAligner
 from imutils.face_utils import rect_to_bb
@@ -19,6 +19,7 @@ import os
 from options.test_options import TestOptions
 from data.data_loader import CreateDataLoader
 from models.models import create_model
+import matplotlib.pyplot as plt
 
 def create_mp4(input_img_path, csv_path):
     
