@@ -62,12 +62,16 @@ def work(bot, update, option):
         'rotate': True,
         'scale': True,
         'skew': False,
-        'sepia': True,
-        'sepia_scale': 0.6,
+        'sepia': False,
+        'sepia_scale': 0.4,
         'angle_start': 0,
-        'angle_step': 0.5,
-        'scale_start': 0.5,
-        'scale_step': 0.01
+        'angle_stop': 35,
+        'angle_step': 0.2,
+        'angle_reverse': True,
+        'scale_start': 0.7,
+        'scale_stop': 1.2,
+        'scale_step': 0.005,
+        'scale_reverse': True
     }
     folder = result_path + str(userid) + "/"
     # Paths

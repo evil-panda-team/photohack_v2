@@ -118,12 +118,14 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
     # Read until video is completed
     with imageio.get_writer('{}{}'.format(ns_paths.gifs_folder,
                                           ns_paths.gif_name), mode='I', fps=25) as writer:
-        angle = 0
+        angle_curr = ns_transforms.angle_start
+        scale_curr = ns_transforms.scale_start
+        angle_direction = 1
+        scale_direction = 1
         while(cap.isOpened()):
             ret, frame = cap.read()
             if ret == True:
-                if angle == 360:
-                    angle = 0
+                angle_curr %= 360
                 anim_frame = cv2.resize(
                     frame, tuple(desired_size))
                 if ns_transforms.sepia:
@@ -136,10 +138,19 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
 
                 output = cv2.cvtColor(template, cv2.COLOR_BGR2RGB)
                 if ns_transforms.rotate or ns_transforms.scale or ns_transforms.skew:
-                    angle_t = (ns_transforms.angle_start +
-                               angle) if ns_transforms.rotate else 0
-                    scale_t = (ns_transforms.scale_start +
-                               ns_transforms.scale_step*angle) if ns_transforms.scale else 1
+
+                    if angle_curr < ns_transforms.angle_stop:
+                        angle_curr += (angle_direction * ns_transforms.angle_step)
+                    elif ns_transforms.angle_reverse:
+                        angle_direction *= -1
+                        angle_curr += (angle_direction * ns_transforms.angle_step)
+                    if scale_curr < ns_transforms.scale_stop:
+                        scale_curr += (scale_direction * ns_transforms.scale_step)
+                    elif ns_transforms.scale_reverse:
+                        scale_direction *= -1
+                        scale_curr += (scale_direction * ns_transforms.scale_step)
+                    angle_t = angle_curr if ns_transforms.rotate else 0
+                    scale_t = scale_curr if ns_transforms.scale else 1
                     R = cv2.getRotationMatrix2D(
                         (int(t_cols/2), int(t_rows/2)
                          ), angle_t,
@@ -153,7 +164,7 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
                 if show_result:
                     cv2.imshow('output', output)
                 writer.append_data(output)
-                angle += ns_transforms.angle_step
+
                 # Press Q to exit
                 if cv2.waitKey(25) & 0xFF == ord('q'):
                     break
@@ -168,12 +179,16 @@ def main():
         'rotate': True,
         'scale': True,
         'skew': False,
-        'sepia': True,
-        'sepia_scale': 0.6,
+        'sepia': False,
+        'sepia_scale': 0.4,
         'angle_start': 0,
-        'angle_step': 0.5,
-        'scale_start': 0.5,
-        'scale_step': 0.01
+        'angle_stop': 35,
+        'angle_step': 0.2,
+        'angle_reverse': True,
+        'scale_start': 0.7,
+        'scale_stop': 1.2,
+        'scale_step': 0.005,
+        'scale_reverse': True
     }
 
     # Paths
@@ -181,8 +196,8 @@ def main():
         'templates_folder': 'templates/',
         'animations_folder': 'animations/',
         'gifs_folder': 'results/gifs/',
-        'animation_name': 'vlad_nixelpixel.mp4',
-        'gif_name': 'newspaper.gif',
+        'animation_name': 'vlad_2.mp4',
+        'gif_name': 'newspaper_vlad2.gif',
         'fonts_folder': 'fonts/'
     }
 
@@ -193,7 +208,7 @@ def main():
         'color': (0, 0, 0),
         'font': 'Mugglenews.ttf',
         'headline_text': 'SENSATION!',
-        'sub_headline_text': 'MENSTRUAL CUP FOR MEN'
+        'sub_headline_text': 'EVIL PANDA MADE CRAZY THING AGAIN!'
     }
 
     # Select one of the scenarios
