@@ -29,6 +29,8 @@ REQUEST_KWARGS = {
 
 result_path = "bot/source/"
 
+texts = {}
+
 
 def photohandler(bot, update):
     userid = update.message.from_user.id
@@ -52,7 +54,7 @@ def menu_keyboard():
     keyboard = [[InlineKeyboardButton('talk ', callback_data='one')],
                 [InlineKeyboardButton('bla-bla ', callback_data='two')],
                 [InlineKeyboardButton('scream ', callback_data='three')],
-                [InlineKeyboardButton('mimimi ', callback_data='four')],
+                [InlineKeyboardButton('girl ', callback_data='four')],
                 ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -67,14 +69,15 @@ def work(bot, update, option):
         'sepia': False,
         'sepia_scale': 0.4,
         'angle_start': 0,
-        'angle_stop': 35,
-        'angle_step': 0.2,
+        'angle_stop': 25,
+        'angle_step': 0.4,
         'angle_reverse': True,
         'scale_start': 0.7,
         'scale_stop': 1.2,
-        'scale_step': 0.005,
+        'scale_step': 0.01,
         'scale_reverse': True
     }
+
     folder = result_path + str(userid) + "/"
     # Paths
     params_paths = {
@@ -93,8 +96,11 @@ def work(bot, update, option):
         'color': (0, 0, 0),
         'font': 'Mugglenews.ttf',
         'headline_text': 'SENSATION!',
-        'sub_headline_text': 'New SUPERSTAR found!'
+        'sub_headline_text': 'Evil Panda crazy again!'
     }
+
+    if userid in texts:
+        params_text['sub_headline_text'] = texts[userid]
 
     # Select one of the scenarios
     scenario = 2
@@ -134,7 +140,7 @@ def four_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
                      text="four choosed! Wait a bit please")
 
-    work(bot, update, "icface/csv/gay.csv")
+    work(bot, update, "icface/csv/baba_short.csv")
 
 
 def run_bot():
@@ -149,8 +155,10 @@ def run_bot():
     dispatcher.add_handler(start_handler)
 
     def notunderstand(bot, update):
+        userid = update.message.from_user.id
+        texts[userid] = update.message.text
         bot.send_message(chat_id=update.message.chat_id,
-                         text="I'm a super bot, understand only image!")
+                         text="Text updated!")
 
     echo_handler = MessageHandler(Filters.text, notunderstand)
     dispatcher.add_handler(echo_handler)
