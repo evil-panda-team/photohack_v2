@@ -29,6 +29,8 @@ REQUEST_KWARGS = {
 
 result_path = "bot/source/"
 
+texts = {}
+
 
 def photohandler(bot, update):
     userid = update.message.from_user.id
@@ -67,14 +69,15 @@ def work(bot, update, option):
         'sepia': False,
         'sepia_scale': 0.4,
         'angle_start': 0,
-        'angle_stop': 35,
-        'angle_step': 0.2,
+        'angle_stop': 25,
+        'angle_step': 0.3,
         'angle_reverse': True,
         'scale_start': 0.7,
         'scale_stop': 1.2,
-        'scale_step': 0.005,
+        'scale_step': 0.02,
         'scale_reverse': True
     }
+
     folder = result_path + str(userid) + "/"
     # Paths
     params_paths = {
@@ -95,6 +98,9 @@ def work(bot, update, option):
         'headline_text': 'SENSATION!',
         'sub_headline_text': 'New SUPERSTAR found!'
     }
+
+    if userid in texts:
+        params_text['sub_headline_text'] = texts[userid]
 
     # Select one of the scenarios
     scenario = 2
@@ -149,8 +155,10 @@ def run_bot():
     dispatcher.add_handler(start_handler)
 
     def notunderstand(bot, update):
+        userid = update.message.from_user.id
+        texts[userid] = update.message.text
         bot.send_message(chat_id=update.message.chat_id,
-                         text="I'm a super bot, understand only image!")
+                         text="Text updated!")
 
     echo_handler = MessageHandler(Filters.text, notunderstand)
     dispatcher.add_handler(echo_handler)
