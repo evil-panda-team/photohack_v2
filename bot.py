@@ -121,7 +121,7 @@ def one_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
                      text="one choosed! Wait a bit please")
 
-    work(bot, update, "icface/csv/muzhik.csv")
+    work(bot, update, "icface/csv/muzhik_short.csv")
 
 
 def two_menu(bot, update):
@@ -135,7 +135,7 @@ def three_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
                      text="three choosed! Wait a bit please")
 
-    work(bot, update, "icface/csv/vlad_scream.csv")
+    work(bot, update, "icface/csv/vlad_scream_short.csv")
 
 
 def four_menu(bot, update):
