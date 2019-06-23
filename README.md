@@ -15,7 +15,7 @@ python3 bot.py
 ### Result
 More are in gifs directory
 
-![Potternews example](gifs/gosling.gif | width=50)
+![Potternews example](gifs/gosling.gif)
 ![Potternews example2](gifs/anna.gif)
 
 Feel free to open issues and create pull requests.
