@@ -56,15 +56,16 @@ def menu_keyboard():
 def work(bot, update, option):
     userid = update.callback_query.message.chat.id
     create_mp4(result_path + str(userid)+ "/source.jpg", option)
-
     params_transform = {
         'rotate': True,
+        'scale': True,
+        'sepia': True,
+        'sepia_scale': 0.6,
         'angle_start': 0,
         'angle_step': 0.5,
         'scale_start': 0.5,
         'scale_step': 0.01
     }
-
     folder = result_path + str(userid) + "/"
     # Paths
     params_paths = {

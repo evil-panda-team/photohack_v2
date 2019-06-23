@@ -84,9 +84,9 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
              text_box_ltp[1]:text_box_rbp[1], :] = text_box_params['color']
 
     font = cv2.FONT_HERSHEY_TRIPLEX and cv2.FONT_ITALIC
-    ft = cv2.freetype.createFreeType2()
-    ft.loadFontData(
-        fontFileName='fonts/Mugglenews.ttf', id=0)
+#    ft = cv2.freetype.createFreeType2()
+#    ft.loadFontData(
+#        fontFileName='fonts/Mugglenews.ttf', id=0)
 
     target_rect_line1 = [text_box_ltp[1], text_box_ltp[0],
                          text_box_rbp[1]-text_box_ltp[1],
@@ -95,10 +95,10 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
                          text_box_rbp[1]-text_box_ltp[1],
                          int((text_box_rbp[0]-text_box_ltp[0])/2)]
 
-    draw_text_scaled_to_rect(template, ns_text.headline_text, target_rect_line1,
-                             ft, ns_text.thickness_line_1, ns_text.color)
-    draw_text_scaled_to_rect(template, ns_text.sub_headline_text, target_rect_line2,
-                             ft, ns_text.thickness_line_2, ns_text.color)
+#    draw_text_scaled_to_rect(template, ns_text.headline_text, target_rect_line1,
+#                             ft, ns_text.thickness_line_1, ns_text.color)
+#    draw_text_scaled_to_rect(template, ns_text.sub_headline_text, target_rect_line2,
+#                             ft, ns_text.thickness_line_2, ns_text.color)
     if show_result:
         cv2.imshow('template', template)
         cv2.waitKey(0)
