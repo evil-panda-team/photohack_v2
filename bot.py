@@ -52,7 +52,7 @@ def menu_keyboard():
     keyboard = [[InlineKeyboardButton('talk ', callback_data='one')],
                 [InlineKeyboardButton('bla-bla ', callback_data='two')],
                 [InlineKeyboardButton('scream ', callback_data='three')],
-                [InlineKeyboardButton('mimimi ', callback_data='four')],
+                [InlineKeyboardButton('girl ', callback_data='four')],
                 ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -134,7 +134,7 @@ def four_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
                      text="four choosed! Wait a bit please")
 
-    work(bot, update, "icface/csv/gay.csv")
+    work(bot, update, "icface/csv/baba_short.csv")
 
 
 def run_bot():
