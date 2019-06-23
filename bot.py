@@ -14,11 +14,12 @@ from add_video_in_template import make_gif
 
 import pathlib
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 TOKEN = '660004381:AAFtmUJ3JU6orRcJIuxFgtf9sQByFB8H5Xs'
 REQUEST_KWARGS = {
-    #'proxy_url': 'http://46.8.28.17:8080'  # socks5://{0}:{1}'.format(proxy, port)
+    # 'proxy_url': 'http://46.8.28.17:8080'  # socks5://{0}:{1}'.format(proxy, port)
     # Optional, if you need authentication:
     # 'urllib3_proxy_kwargs': {
     #     'username': 'PROXY_USER',
@@ -38,7 +39,8 @@ def photohandler(bot, update):
     photo.download(out_path + "/source.jpg")
 
     reply_markup = menu_keyboard()
-    bot.send_message(chat_id=update.message.chat_id, text="choose variant", reply_markup=reply_markup)
+    bot.send_message(chat_id=update.message.chat_id,
+                     text="choose variant", reply_markup=reply_markup)
 
 
 def debugprint(obj):
@@ -55,10 +57,11 @@ def menu_keyboard():
 
 def work(bot, update, option):
     userid = update.callback_query.message.chat.id
-    create_mp4(result_path + str(userid)+ "/source.jpg", option)
+    create_mp4(result_path + str(userid) + "/source.jpg", option)
     params_transform = {
         'rotate': True,
         'scale': True,
+        'skew': False,
         'sepia': True,
         'sepia_scale': 0.6,
         'angle_start': 0,
@@ -73,7 +76,8 @@ def work(bot, update, option):
         'animations_folder': folder,
         'gifs_folder': folder,
         'animation_name': 'source.mp4',
-        'gif_name': 'source.gif'
+        'gif_name': 'source.gif',
+        'fonts_folder': 'fonts/'
     }
 
     # Text lines params
@@ -81,8 +85,9 @@ def work(bot, update, option):
         'thickness_line_1': 2,
         'thickness_line_2': -1,
         'color': (0, 0, 0),
-        'headline_text': 'Sensation!!!',
-        'sub_headline_text': 'Vlados okazalsya volcharoy'
+        'font': 'Mugglenews.ttf',
+        'headline_text': 'SENSATION!',
+        'sub_headline_text': 'MENSTRUAL CUP FOR MEN'
     }
 
     # Select one of the scenarios
@@ -93,19 +98,21 @@ def work(bot, update, option):
     make_gif(params_paths, params_text, params_transform,
              scale_factor=scale_factor, scenario=scenario, show_result=show_result)
 
-
-    gifpath = result_path + str(userid)+ "/source.gif"
-    bot.send_animation(chat_id=update.callback_query.message.chat_id, animation=open(gifpath, 'rb'), timeout=50)
+    gifpath = result_path + str(userid) + "/source.gif"
+    bot.send_animation(chat_id=update.callback_query.message.chat_id,
+                       animation=open(gifpath, 'rb'), timeout=50)
 
 
 def first_menu(bot, update):
-    bot.send_message(chat_id=update.callback_query.message.chat_id, text="baba choosed! Wait a bit please")
+    bot.send_message(chat_id=update.callback_query.message.chat_id,
+                     text="baba choosed! Wait a bit please")
 
     work(bot, update, "icface/csv/baba.csv")
 
 
 def second_menu(bot, update):
-    bot.send_message(chat_id=update.callback_query.message.chat_id, text="carrey choosed! Wait a bit please")
+    bot.send_message(chat_id=update.callback_query.message.chat_id,
+                     text="carrey choosed! Wait a bit please")
 
     work(bot, update, "icface/csv/carrey.csv")
 
@@ -115,13 +122,15 @@ def run_bot():
     dispatcher = updater.dispatcher
 
     def start(bot, update):
-        bot.send_message(chat_id=update.message.chat_id, text="I'm a super bot, send me an image!")
+        bot.send_message(chat_id=update.message.chat_id,
+                         text="I'm a super bot, send me an image!")
 
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
 
     def notunderstand(bot, update):
-        bot.send_message(chat_id=update.message.chat_id, text="I'm a super bot, understand only image!")
+        bot.send_message(chat_id=update.message.chat_id,
+                         text="I'm a super bot, understand only image!")
 
     echo_handler = MessageHandler(Filters.text, notunderstand)
     dispatcher.add_handler(echo_handler)
