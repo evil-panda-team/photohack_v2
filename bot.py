@@ -156,7 +156,7 @@ def run_bot():
     dispatcher.add_handler(photo_handler)
 
     dispatcher.add_handler(CallbackQueryHandler(one_menu, pattern='one'))
-    dispatcher.add_handler(CallbackQueryHandler(two_menu, pattern='second'))
+    dispatcher.add_handler(CallbackQueryHandler(two_menu, pattern='two'))
     dispatcher.add_handler(CallbackQueryHandler(three_menu, pattern='three'))
     dispatcher.add_handler(CallbackQueryHandler(four_menu, pattern='four'))
 
