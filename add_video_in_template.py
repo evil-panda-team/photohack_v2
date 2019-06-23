@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import imageio
 from types import SimpleNamespace
-
+from PIL import ImageFont, ImageDraw, Image 
 
 def add_sepia(img, k=1):
     matrix = [[0.272 - 0.349 * (1 - k), 0.534 - 0.534 *
@@ -17,10 +17,15 @@ def add_sepia(img, k=1):
     return filt
 
 
-def draw_text_scaled_to_rect(img, target_text, target_rect, font_ft, thickness, color):
-    size = font_ft.getTextSize(target_text, 10, thickness)
-    text_width = size[0][0]
-    text_height = size[0][1]
+def draw_text_scaled_to_rect(img, target_text, target_rect, font_name, thickness, color):
+  
+    # Use a truetype font  
+    font = ImageFont.truetype(font_name, 10)
+    ascent, descent = font.getmetrics()
+    (width, baseline), (offset_x, offset_y) = font.font.getsize(target_text)  
+
+    text_height = ascent + descent
+    text_width = width
     target_rect_x = target_rect[0]
     target_rect_y = target_rect[1]
     target_rect_width = target_rect[2]
@@ -32,15 +37,15 @@ def draw_text_scaled_to_rect(img, target_text, target_rect, font_ft, thickness, 
                                               (scale_x - scale) / scale_x*0.5)
     margin_y = 0 if scale == scale_y else int(target_rect_height *
                                               (scale_y - scale) / scale_y*0.5)
-    font_ft.putText(img=img,
-                    text=target_text,
-                    org=(target_rect_x + margin_x, target_rect_y +
-                         target_rect_height - margin_y),
-                    fontHeight=int(scale*10),
-                    color=color,
-                    thickness=thickness,
-                    line_type=cv2.LINE_AA,
-                    bottomLeftOrigin=True)
+    
+    pil_im = Image.fromarray(img)  
+    draw = ImageDraw.Draw(pil_im)
+    font = ImageFont.truetype(font_name, int(10*scale))
+     # Draw the text  
+    draw.text((target_rect_x + margin_x, target_rect_y +
+               target_rect_height - margin_y), target_text,fill='black', font=font) 
+    result_img = np.array(pil_im)
+    return result_img
 
 
 def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenario=2, show_result=False):
@@ -83,22 +88,17 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
     template[text_box_ltp[0]:text_box_rbp[0],
              text_box_ltp[1]:text_box_rbp[1], :] = text_box_params['color']
 
-    font = cv2.FONT_HERSHEY_TRIPLEX and cv2.FONT_ITALIC
-    ft = cv2.freetype.createFreeType2()
-    ft.loadFontData(
-        fontFileName='fonts/Mugglenews.ttf', id=0)
-
-    target_rect_line1 = [text_box_ltp[1], text_box_ltp[0],
+    target_rect_line1 = [text_box_ltp[1], text_box_ltp[0]-int((text_box_rbp[0]-text_box_ltp[0])/2),
                          text_box_rbp[1]-text_box_ltp[1],
                          int((text_box_rbp[0]-text_box_ltp[0])/2)]
-    target_rect_line2 = [text_box_ltp[1], text_box_ltp[0]+int((text_box_rbp[0]-text_box_ltp[0])/2),
+    target_rect_line2 = [text_box_ltp[1], text_box_ltp[0],
                          text_box_rbp[1]-text_box_ltp[1],
                          int((text_box_rbp[0]-text_box_ltp[0])/2)]
 
-    draw_text_scaled_to_rect(template, ns_text.headline_text, target_rect_line1,
-                             ft, ns_text.thickness_line_1, ns_text.color)
-    draw_text_scaled_to_rect(template, ns_text.sub_headline_text, target_rect_line2,
-                             ft, ns_text.thickness_line_2, ns_text.color)
+    template = draw_text_scaled_to_rect(template, ns_text.headline_text, target_rect_line1,
+                             ns_paths.fonts_folder + ns_text.font, ns_text.thickness_line_1, ns_text.color)
+    template = draw_text_scaled_to_rect(template, ns_text.sub_headline_text, target_rect_line2,
+                             ns_paths.fonts_folder + ns_text.font, ns_text.thickness_line_2, ns_text.color)
     if show_result:
         cv2.imshow('template', template)
         cv2.waitKey(0)
@@ -135,7 +135,7 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
                          position[1]: position[1]+anim_h] = anim_frame
 
                 output = cv2.cvtColor(template, cv2.COLOR_BGR2RGB)
-                if ns_transforms.rotate or ns_transforms.scale:
+                if ns_transforms.rotate or ns_transforms.scale or ns_transforms.skew:
                     angle_t = (ns_transforms.angle_start +
                                angle) if ns_transforms.rotate else 0
                     scale_t = (ns_transforms.scale_start +
@@ -144,6 +144,11 @@ def make_gif(params_paths, params_text, params_transform, scale_factor=3, scenar
                         (int(t_cols/2), int(t_rows/2)
                          ), angle_t,
                         scale_t)
+                    if ns_transforms.skew:
+                        pts1 = np.float32([[0,0],[0,t_cols],[t_rows,0],[t_rows,t_cols]])
+                        pts2 = np.float32([[0,0],[0,t_cols-angle],[t_rows,0],[t_rows,t_cols]])
+                        # M = cv2.getPerspectiveTransform(pts1,pts2)
+                        # R = np.matrix(M) * np.matrix(R)
                     output = cv2.warpAffine(output, R, (t_cols, t_rows))
                 if show_result:
                     cv2.imshow('output', output)
@@ -162,6 +167,7 @@ def main():
     params_transform = {
         'rotate': True,
         'scale': True,
+        'skew': False,
         'sepia': True,
         'sepia_scale': 0.6,
         'angle_start': 0,
@@ -176,7 +182,8 @@ def main():
         'animations_folder': 'animations/',
         'gifs_folder': 'results/gifs/',
         'animation_name': 'vlad_nixelpixel.mp4',
-        'gif_name': 'newspaper.gif'
+        'gif_name': 'newspaper.gif',
+        'fonts_folder': 'fonts/'
     }
 
     # Text lines params
@@ -184,7 +191,8 @@ def main():
         'thickness_line_1': 2,
         'thickness_line_2': -1,
         'color': (0, 0, 0),
-        'headline_text': 'SENSATION',
+        'font': 'Mugglenews.ttf',
+        'headline_text': 'SENSATION!',
         'sub_headline_text': 'MENSTRUAL CUP FOR MEN'
     }
 
