@@ -55,6 +55,8 @@ def menu_keyboard():
                 [InlineKeyboardButton('bla-bla ', callback_data='two')],
                 [InlineKeyboardButton('scream ', callback_data='three')],
                 [InlineKeyboardButton('girl ', callback_data='four')],
+                [InlineKeyboardButton('clarke ', callback_data='five')],
+                [InlineKeyboardButton('nixelpixel ', callback_data='six')],
                 ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -142,6 +144,17 @@ def four_menu(bot, update):
 
     work(bot, update, "icface/csv/baba_short.csv")
 
+def five_menu(bot, update):
+    bot.send_message(chat_id=update.callback_query.message.chat_id,
+                     text="five choosed! Wait a bit please")
+
+    work(bot, update, "icface/csv/clarke_short.csv")
+
+def six_menu(bot, update):
+    bot.send_message(chat_id=update.callback_query.message.chat_id,
+                     text="six choosed! Wait a bit please")
+
+    work(bot, update, "icface/csv/nixelpixel.csv")
 
 def run_bot():
     updater = Updater(TOKEN, request_kwargs=REQUEST_KWARGS)
@@ -170,6 +183,8 @@ def run_bot():
     dispatcher.add_handler(CallbackQueryHandler(two_menu, pattern='two'))
     dispatcher.add_handler(CallbackQueryHandler(three_menu, pattern='three'))
     dispatcher.add_handler(CallbackQueryHandler(four_menu, pattern='four'))
+    dispatcher.add_handler(CallbackQueryHandler(five_menu, pattern='five'))
+    dispatcher.add_handler(CallbackQueryHandler(six_menu, pattern='six'))
 
     updater.start_polling()
     updater.idle()
