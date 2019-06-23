@@ -70,11 +70,11 @@ def work(bot, update, option):
         'sepia_scale': 0.4,
         'angle_start': 0,
         'angle_stop': 25,
-        'angle_step': 0.3,
+        'angle_step': 0.4,
         'angle_reverse': True,
         'scale_start': 0.7,
         'scale_stop': 1.2,
-        'scale_step': 0.02,
+        'scale_step': 0.01,
         'scale_reverse': True
     }
 
@@ -96,7 +96,7 @@ def work(bot, update, option):
         'color': (0, 0, 0),
         'font': 'Mugglenews.ttf',
         'headline_text': 'SENSATION!',
-        'sub_headline_text': 'New SUPERSTAR found!'
+        'sub_headline_text': 'Evil Panda crazy again!'
     }
 
     if userid in texts:
