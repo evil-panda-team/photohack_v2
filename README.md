@@ -15,8 +15,9 @@ python3 bot.py
 ### Result
 More are in gifs directory
 
-![Potternews example1](gifs/mona.gif)
-![Potternews example2](gifs/gosling.gif)
-![Potternews example3](gifs/anna.gif)
+<img src="https://raw.githubusercontent.com/l1va/potternews/master/gifs/mona.gif" height="250" />
+<img src="https://raw.githubusercontent.com/l1va/potternews/master/gifs/gosling.gif" height="250" />
+<img src="https://raw.githubusercontent.com/l1va/potternews/master/gifs/anna.gif" height="250" />
+
 
 Feel free to open issues and create pull requests.
