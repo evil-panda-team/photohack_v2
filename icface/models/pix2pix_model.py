@@ -14,6 +14,7 @@ import os
 from torch import autograd
 import copy
 from natsort import natsorted, ns
+import shutil
 
 class Estimate(nn.Module):
     def __init__(self):
@@ -138,6 +139,9 @@ class Pix2PixModel(BaseModel):
 #        pdb.set_trace()
 #        desti=os.path.dirname(self.image_paths[0])+'/'+self.opt.results_dir
         desti = 'tempdir'
+        
+        if os.path.exists(desti):
+            shutil.rmtree(desti)
 
         if not os.path.isdir(desti):
                 os.makedirs(desti)     
