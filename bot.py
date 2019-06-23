@@ -42,7 +42,7 @@ def photohandler(bot, update):
 
     reply_markup = menu_keyboard()
     bot.send_message(chat_id=update.message.chat_id,
-                     text="choose variant", reply_markup=reply_markup)
+                     text="Choose reference variant please", reply_markup=reply_markup)
 
 
 def debugprint(obj):
@@ -51,12 +51,12 @@ def debugprint(obj):
 
 
 def menu_keyboard():
-    keyboard = [[InlineKeyboardButton('talk ', callback_data='one')],
-                [InlineKeyboardButton('bla-bla ', callback_data='two')],
-                [InlineKeyboardButton('scream ', callback_data='three')],
-                [InlineKeyboardButton('girl ', callback_data='four')],
-                [InlineKeyboardButton('clarke ', callback_data='five')],
-                [InlineKeyboardButton('nixelpixel ', callback_data='six')],
+    keyboard = [[InlineKeyboardButton('Talk ', callback_data='one')],
+                [InlineKeyboardButton('Bla-bla ', callback_data='two')],
+                [InlineKeyboardButton('Scream ', callback_data='three')],
+                [InlineKeyboardButton('Girl ', callback_data='four')],
+                [InlineKeyboardButton('Emilia Clarke ', callback_data='five')],
+                [InlineKeyboardButton('Nixelpixel ', callback_data='six')],
                 ]
     return InlineKeyboardMarkup(keyboard)
 
@@ -75,8 +75,8 @@ def work(bot, update, option):
         'angle_step': 0.4,
         'angle_reverse': True,
         'scale_start': 0.7,
-        'scale_stop': 1.2,
-        'scale_step': 0.01,
+        'scale_stop': 1.3,
+        'scale_step': 0.008,
         'scale_reverse': True
     }
 
@@ -98,7 +98,7 @@ def work(bot, update, option):
         'color': (0, 0, 0),
         'font': 'Mugglenews.ttf',
         'headline_text': 'SENSATION!',
-        'sub_headline_text': 'Evil Panda crazy again!'
+        'sub_headline_text': 'Evil Panda is crazy again!'
     }
 
     if userid in texts:
@@ -119,40 +119,40 @@ def work(bot, update, option):
 
 def one_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
-                     text="one choosed! Wait a bit please")
+                     text="One choosen! Wait a bit please")
 
-    work(bot, update, "icface/csv/muzhik.csv")
+    work(bot, update, "icface/csv/muzhik_short.csv")
 
 
 def two_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
-                     text="two choosed! Wait a bit please")
+                     text="Two choosen! Wait a bit please")
 
     work(bot, update, "icface/csv/vlad_photolab.csv")
 
 
 def three_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
-                     text="three choosed! Wait a bit please")
+                     text="Three choosed! Wait a bit please")
 
-    work(bot, update, "icface/csv/vlad_scream.csv")
+    work(bot, update, "icface/csv/vlad_scream_short.csv")
 
 
 def four_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
-                     text="four choosed! Wait a bit please")
+                     text="Four choosed! Wait a bit please")
 
     work(bot, update, "icface/csv/baba_short.csv")
 
 def five_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
-                     text="five choosed! Wait a bit please")
+                     text="Five choosed! Wait a bit please")
 
     work(bot, update, "icface/csv/clarke_short.csv")
 
 def six_menu(bot, update):
     bot.send_message(chat_id=update.callback_query.message.chat_id,
-                     text="six choosed! Wait a bit please")
+                     text="Six choosed! Wait a bit please")
 
     work(bot, update, "icface/csv/nixelpixel.csv")
 
